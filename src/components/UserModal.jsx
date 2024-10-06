@@ -1,59 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import './UserModal.css'; // CSS file for styling
+import React, { useState, useEffect } from "react";
+import "./UserModal.css"; // CSS file for styling
 
 const UserModal = ({ onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
-
-    username: '',
-    name: '',
-    email: '',
-    phone: '',
-    website: '',
+    username: "",
+    name: "",
+    email: "",
+    phone: "",
+    website: "",
     company: {
-        name: '',
-      }
+      name: "",
+    },
+
+    address:{
+        street:"",
+        city:""
+    }
   });
-  
+
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (initialData) {
       setFormData({
-        username: initialData.username || '',
-        name: initialData.name || '',
-        email: initialData.email || '',
-        phone: initialData.phone || '',
-        website: initialData.website || '',
+        username: initialData.username || "",
+        name: initialData.name || "",
+        email: initialData.email || "",
+        phone: initialData.phone || "",
+        website: initialData.website || "",
         company: {
-            name: initialData.company?.name || '',
-          }
-       
+          name: initialData.company?.name || "",
+        },
+        address:{
+            street:initialData.address?.street || "",
+            city:initialData.address?.city || "",
+        }
       });
     }
   }, [initialData]);
 
- // Handle input change and validation dynamically
- const handleInputChange = (e) => {
+  // Handle input change and validation dynamically
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-     // Check if the field being updated is nested
-  if (name.includes('.')) {
-    const [parentKey, childKey] = name.split('.'); // Split 'company.name' into ['company', 'name']
+    // Check if the field being updated is nested
+    if (name.includes(".")) {
+      const [parentKey, childKey] = name.split("."); // Split 'company.name' into ['company', 'name']
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [parentKey]: {
-        ...prevFormData[parentKey], // Keep the rest of the company fields intact
-        [childKey]: value           // Update the specific field (like company.name)
-      }
-    }));
-  } else {
-    // For non-nested fields, you can update as usual
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  }
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [parentKey]: {
+          ...prevFormData[parentKey], // Keep the rest of the company fields intact
+          [childKey]: value, // Update the specific field (like company.name)
+        },
+      }));
+    } else {
+      // For non-nested fields, can update as usual
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
 
     // Validate field dynamically as user types
     if (errors[name]) {
@@ -68,18 +75,25 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
     }
   };
 
-  const validateField = (field, value) => {
-    let error = '';
-    switch (field) {
-      case 'name':
-        if (value.length < 3) error = 'Name must be at least 3 characters';
-        break;
-      case 'email':
-        if (!/\S+@\S+\.\S+/.test(value)) error = 'Invalid email address';
-        break;
-      default:
-        break;
-    }
+  const validateField = (name, value) => {
+    let error = "";
+    if (name === "username" && value.length < 3)
+        error = "User Name must be at least 3 characters";
+    if (name === "name" && value.length < 3)
+      error = "Name must be at least 3 characters";
+    if (name === "email" && !/\S+@\S+\.\S+/.test(value))
+      error = "Invalid email format";
+    if (name === "phone" && value.length < 10) error = "Phone must be valid";
+    if (name === "address.street" && value === "") error = "Street is required";
+    if (name === "address.city" && value === "") error = "City is required";
+    if (name === "company.name" && value.length < 3)
+      error = "Company name must be at least 3 characters";
+    if (
+      name === "website" &&
+      value !== "" &&
+      !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(value)
+    )
+      error = "Invalid URL format";
     return error;
   };
 
@@ -91,8 +105,6 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
       if (error) newErrors[field] = error;
     });
 
-    
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
@@ -101,31 +113,32 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
     }
   };
 
-  const handleUser=()=>{
-    alert('UserName can not be edited');
-  }
-
+  const handleUser = () => {
+    if (initialData) alert("UserName can not be edited");
+  };
 
   return (
     <div className="modal-overlay">
       <div className="modal-content glass-card">
-        <button className="close-btn" onClick={onClose}>✖</button>
+        <button className="close-btn" onClick={onClose}>
+          ✖
+        </button>
         <h2 className="modal-title">Add New User</h2>
         <form onSubmit={handleSubmit}>
-
-        <div className="form-row">
+          <div className="form-row">
             <label>*Username:</label>
             <div className="form-input">
               <input
                 type="text"
                 name="username"
                 value={formData.username}
-                onChange={ handleInputChange }
+                onChange={handleInputChange}
                 readOnly={!!initialData} // Non-editable only when editing an existing user
                 onClick={handleUser}
-
               />
-               {errors.username && <div className="error-text">{errors.username}</div>}
+              {errors.username && (
+                <div className="error-text">{errors.username}</div>
+              )}
             </div>
           </div>
           <div className="form-row">
@@ -166,6 +179,30 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
           </div>
 
           <div className="form-row">
+            <label>*Street:</label>
+            <div className="form-input">
+              <input
+                type="text"
+                name="address.street"
+                value={formData.address.street}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <label>*City:</label>
+            <div className="form-input">
+              <input
+                type="text"
+                name="address.city"
+                value={formData.address.city}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
             <label>Company:</label>
             <div className="form-input">
               <input
@@ -188,9 +225,11 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
               />
             </div>
           </div>
-        
+
           <div className="form-actions">
-            <button type="submit" className="submit-btn">Add User</button>
+            <button type="submit" className="submit-btn">
+            {initialData ? 'Update User' : 'Add User'}
+            </button>
           </div>
         </form>
       </div>

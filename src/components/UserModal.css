@@ -11,9 +11,7 @@
     z-index: 1000;
     backdrop-filter:blur(10px);
   }
-  /* *{
-    border: 1px solid red;
-  } */
+
   
   .glass-card {
     background: white;

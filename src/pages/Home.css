@@ -1,0 +1,45 @@
+body {
+    min-height: 100vh; 
+    background: linear-gradient(135deg, #0B1120, #ACB6E5);
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    width: 100%; 
+    overflow-x: hidden; 
+}
+
+   .user-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0,400px)); 
+    gap: 20px;
+    padding: 20px;
+    max-width:1200px;
+    place-content: center;
+    margin:auto;
+  }
+  
+
+  .add-user-btn{
+    padding:10px 25px;
+    font-weight: bold;
+    border-radius:10px;
+    cursor:pointer;
+  }
+
+  .add-user-btn:hover{
+    transform: scale(1.05);
+    background-color: aqua;
+    transition: transform 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    .user-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+
+  @media (min-width: 1024px) {
+    .user-grid {
+      grid-template-columns: repeat(3, 1fr); 
+    }
+  }
