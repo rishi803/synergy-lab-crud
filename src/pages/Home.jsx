@@ -36,23 +36,31 @@ const Home = () => {
   };
 
   const handleAddOrUpdateUser = (newUser) => {
+    console.log("User data being submitted:", newUser);
     if (editingUser) {
       axios.put(`https://jsonplaceholder.typicode.com/users/${editingUser.id}`, newUser)
         .then((res) => {
-          setUsers(users.map((user) => (user.id === editingUser.id ? res.data : user)));
+          setUsers(users.map((user) => (user.id === editingUser.id ? { ...user, ...newUser } : user))); // Update user with the existing properties
           setEditingUser(null);
           setIsModalOpen(false);
         })
-        .catch(() => alert("Unable to edit"));
+        .catch((error) => {
+          console.error("Error updating user:", error);
+          alert("Unable to edit");
+        });
     } else {
       axios.post('https://jsonplaceholder.typicode.com/users', newUser)
         .then((res) => {
-          setUsers((prev) => [ res.data, ...prev]);
+          setUsers((prev) => [res.data, ...prev]);
           setIsModalOpen(false);
         })
-        .catch(() => alert("Failed to add user."));
+        .catch((error) => {
+          console.error("Error adding user:", error);
+          alert("Failed to add user.");
+        });
     }
   };
+  
 
   return (
     <div>

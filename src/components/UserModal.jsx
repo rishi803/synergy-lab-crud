@@ -99,6 +99,7 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
     const newErrors = {};
     Object.keys(formData).forEach((field) => {
       const error = validateField(field, formData[field]);
@@ -124,7 +125,7 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
           ✖
         </button>
         <h2 className="modal-title">Add New User</h2>
-        <form onSubmit={handleSubmit}>
+        <form >
           <div className="form-row">
             <label>*Username:</label>
             <div className="form-input">
@@ -227,7 +228,7 @@ const UserModal = ({ onClose, onSubmit, initialData }) => {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="submit-btn">
+            <button type="submit" className="submit-btn" onClick={handleSubmit}>
             {initialData ? 'Update User' : 'Add User'}
             </button>
           </div>
