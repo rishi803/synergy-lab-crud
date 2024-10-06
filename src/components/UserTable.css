@@ -1,0 +1,40 @@
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border:1px solid black;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+  }
+ 
+  .user-table th, .user-table td {
+    border:1px solid black;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-table tr:nth-child(odd) {
+    background-color: #31b365 !important;
+  }
+  
+  .user-table th {
+    background-color: #682bda;
+    color:white;
+  }
+  
+  .user-table a {
+    color: blue;
+    text-decoration: none;
+  }
+
+.edit{
+    padding:5px;
+    border-radius:10px;
+    background-color: rgb(251, 251, 91);
+}
+.delete{
+    padding:5px;
+    border-radius:10px;
+    background-color: rgb(250, 111, 111);
+}
+  
